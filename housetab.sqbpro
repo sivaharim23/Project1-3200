@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="housetab.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="0"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="2652"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="Category" custom_title="0" dock_id="1" table="4,8:mainCategory"/><dock_state state="000000ff00000000fd00000001000000020000000000000000fc0100000001fb000000160064006f0063006b00420072006f00770073006500310100000000ffffffff0000011800ffffff000000000000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1">-- 1. User
+CREATE TABLE User (
+    userID      INTEGER PRIMARY KEY AUTOINCREMENT,
+    name        TEXT    NOT NULL,
+    email       TEXT    NOT NULL UNIQUE,
+    passwordHash TEXT   NOT NULL,
+    createdAt   DATE    NOT NULL
+);
+
+-- 2. Household
+CREATE TABLE Household (
+    householdID INTEGER PRIMARY KEY AUTOINCREMENT,
+    name        TEXT    NOT NULL,
+    address     TEXT    NOT NULL,
+    createdAt   DATE    NOT NULL
+);
+
+-- 3. HouseholdMembership
+CREATE TABLE HouseholdMembership (
+    membershipID  INTEGER PRIMARY KEY AUTOINCREMENT,
+    userID        INTEGER NOT NULL,
+    householdID   INTEGER NOT NULL,
+    role          TEXT    NOT NULL,
+    joinDate      DATE    NOT NULL,
+    leaveDate     DATE,
+    FOREIGN KEY (userID)      REFERENCES User(userID),
+    FOREIGN KEY (householdID) REFERENCES Household(householdID)
+);
+
+-- 4. Lease
+CREATE TABLE Lease (
+    leaseID       INTEGER PRIMARY KEY AUTOINCREMENT,
+    householdID   INTEGER NOT NULL,
+    startDate     DATE    NOT NULL,
+    endDate       DATE    NOT NULL,
+    monthlyRent   REAL    NOT NULL,
+    depositAmount REAL    NOT NULL,
+    FOREIGN KEY (householdID) REFERENCES Household(householdID)
+);
+
+-- 5. Category
+CREATE TABLE Category (
+    categoryID  INTEGER PRIMARY KEY AUTOINCREMENT,
+    name        TEXT    NOT NULL UNIQUE,
+    description TEXT
+);
+
+-- 6. Expense
+CREATE TABLE Expense (
+    expenseID     INTEGER PRIMARY KEY AUTOINCREMENT,
+    householdID   INTEGER NOT NULL,
+    categoryID    INTEGER,
+    paidByUserID  INTEGER NOT NULL,
+    title         TEXT    NOT NULL,
+    totalAmount   REAL    NOT NULL,
+    datePaid      DATE    NOT NULL,
+    notes         TEXT,
+    FOREIGN KEY (householdID)  REFERENCES Household(householdID),
+    FOREIGN KEY (categoryID)   REFERENCES Category(categoryID),
+    FOREIGN KEY (paidByUserID) REFERENCES User(userID)
+);
+
+-- 7. ExpenseSplit
+CREATE TABLE ExpenseSplit (
+    splitID     INTEGER PRIMARY KEY AUTOINCREMENT,
+    expenseID   INTEGER NOT NULL,
+    userID      INTEGER NOT NULL,
+    splitAmount REAL    NOT NULL,
+    isPaid      INTEGER NOT NULL DEFAULT 0,
+    FOREIGN KEY (expenseID) REFERENCES Expense(expenseID),
+    FOREIGN KEY (userID)    REFERENCES User(userID)
+);
+
+-- 8. Settlement
+CREATE TABLE Settlement (
+    settlementID  INTEGER PRIMARY KEY AUTOINCREMENT,
+    payerUserID   INTEGER NOT NULL,
+    payeeUserID   INTEGER NOT NULL,
+    householdID   INTEGER NOT NULL,
+    amount        REAL    NOT NULL,
+    date          DATE    NOT NULL,
+    notes         TEXT,
+    FOREIGN KEY (payerUserID)  REFERENCES User(userID),
+    FOREIGN KEY (payeeUserID)  REFERENCES User(userID),
+    FOREIGN KEY (householdID)  REFERENCES Household(householdID)
+);
+
+-- 9. RecurringExpense
+CREATE TABLE RecurringExpense (
+    recurringID  INTEGER PRIMARY KEY AUTOINCREMENT,
+    householdID  INTEGER NOT NULL,
+    categoryID   INTEGER,
+    title        TEXT    NOT NULL,
+    amount       REAL    NOT NULL,
+    frequency    TEXT    NOT NULL,
+    FOREIGN KEY (householdID) REFERENCES Household(householdID),
+    FOREIGN KEY (categoryID)  REFERENCES Category(categoryID)
+);
+
+-- 10. Notification
+CREATE TABLE Notification (
+    notificationID INTEGER PRIMARY KEY AUTOINCREMENT,
+    userID         INTEGER NOT NULL,
+    message        TEXT    NOT NULL,
+    isRead         INTEGER NOT NULL DEFAULT 0,
+    createdAt      DATE    NOT NULL,
+    FOREIGN KEY (userID) REFERENCES User(userID)
+);
+
+-- 11. Tag
+CREATE TABLE Tag (
+    tagID INTEGER PRIMARY KEY AUTOINCREMENT,
+    name  TEXT  NOT NULL UNIQUE
+);
+
+-- 12. ExpenseTag
+CREATE TABLE ExpenseTag (
+    expenseID INTEGER NOT NULL,
+    tagID     INTEGER NOT NULL,
+    PRIMARY KEY (expenseID, tagID),
+    FOREIGN KEY (expenseID) REFERENCES Expense(expenseID),
+    FOREIGN KEY (tagID)     REFERENCES Tag(tagID)
+);</sql><current_tab id="0"/></tab_sql></sqlb_project>

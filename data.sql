@@ -1,6 +1,4 @@
--- =====================
--- USER
--- =====================
+
 INSERT INTO User (name, email, passwordHash, createdAt) VALUES
 ('Alex Johnson', 'alex@email.com', 'hash1234', '2024-01-01'),
 ('Maria Garcia', 'maria@email.com', 'hash5678', '2024-01-01'),
@@ -9,16 +7,12 @@ INSERT INTO User (name, email, passwordHash, createdAt) VALUES
 ('Chris Wong', 'chris@email.com', 'hash7890', '2024-02-01'),
 ('Priya Nair', 'priya@email.com', 'hash2345', '2024-02-01');
 
--- =====================
--- HOUSEHOLD
--- =====================
+
 INSERT INTO Household (name, address, createdAt) VALUES
 ('Sunset Apartment', '123 Sunset Blvd, Albany, NY', '2024-01-01'),
 ('Maple House', '456 Maple Street, Albany, NY', '2024-02-01');
 
--- =====================
--- HOUSEHOLDMEMBERSHIP
--- =====================
+
 INSERT INTO HouseholdMembership (userID, householdID, role, joinDate, leaveDate) VALUES
 (1, 1, 'admin', '2024-01-01', NULL),
 (2, 1, 'member', '2024-01-01', NULL),
@@ -27,16 +21,12 @@ INSERT INTO HouseholdMembership (userID, householdID, role, joinDate, leaveDate)
 (5, 2, 'member', '2024-02-01', NULL),
 (6, 2, 'member', '2024-02-01', NULL);
 
--- =====================
--- LEASE
--- =====================
+
 INSERT INTO Lease (householdID, startDate, endDate, monthlyRent, depositAmount) VALUES
 (1, '2024-01-01', '2024-12-31', 2400.00, 2400.00),
 (2, '2024-02-01', '2025-01-31', 2100.00, 2100.00);
 
--- =====================
--- CATEGORY
--- =====================
+
 INSERT INTO Category (name, description) VALUES
 ('Rent', 'Monthly rent payments'),
 ('Utilities', 'Electricity, water, gas bills'),
@@ -45,9 +35,7 @@ INSERT INTO Category (name, description) VALUES
 ('Cleaning', 'Cleaning supplies and services'),
 ('Entertainment', 'Streaming services and activities');
 
--- =====================
--- EXPENSE
--- =====================
+
 INSERT INTO Expense (householdID, categoryID, paidByUserID, title, totalAmount, datePaid, notes) VALUES
 (1, 1, 1, 'January Rent', 2400.00, '2024-01-01', 'Split 3 ways'),
 (1, 2, 2, 'Electric Bill', 120.00, '2024-01-15', 'Higher due to heating'),
@@ -60,9 +48,7 @@ INSERT INTO Expense (householdID, categoryID, paidByUserID, title, totalAmount, 
 (2, 6, 4, 'Netflix', 18.00, '2024-02-01', 'Shared Netflix plan'),
 (1, 2, 1, 'Gas Bill', 75.00, '2024-02-05', 'February gas');
 
--- =====================
--- EXPENSESPLIT
--- =====================
+
 INSERT INTO ExpenseSplit (expenseID, userID, splitAmount, isPaid) VALUES
 -- January Rent split 3 ways (800 each)
 (1, 1, 800.00, 1),
@@ -105,27 +91,21 @@ INSERT INTO ExpenseSplit (expenseID, userID, splitAmount, isPaid) VALUES
 (10, 2, 25.00, 0),
 (10, 3, 25.00, 0);
 
--- =====================
--- SETTLEMENT
--- =====================
+
 INSERT INTO Settlement (payerUserID, payeeUserID, householdID, amount, date, notes) VALUES
 (3, 1, 1, 800.00, '2024-01-20', 'James paying Alex back for rent'),
 (2, 1, 1, 40.00, '2024-01-25', 'Maria paying Alex back for electric'),
 (6, 4, 2, 700.00, '2024-02-15', 'Priya paying Sofia back for rent'),
 (5, 4, 2, 30.00, '2024-02-20', 'Chris paying Sofia back for water');
 
--- =====================
--- RECURRINGEXPENSE
--- =====================
+
 INSERT INTO RecurringExpense (householdID, categoryID, title, amount, frequency) VALUES
 (1, 1, 'Monthly Rent', 2400.00, 'monthly'),
 (1, 4, 'Internet', 60.00, 'monthly'),
 (2, 1, 'Monthly Rent', 2100.00, 'monthly'),
 (2, 6, 'Netflix', 18.00, 'monthly');
 
--- =====================
--- NOTIFICATION
--- =====================
+
 INSERT INTO Notification (userID, message, isRead, createdAt) VALUES
 (3, 'You owe $800.00 for January Rent', 0, '2024-01-01'),
 (2, 'You owe $60.00 for Grocery Run', 1, '2024-01-20'),
@@ -134,9 +114,7 @@ INSERT INTO Notification (userID, message, isRead, createdAt) VALUES
 (3, 'You owe $40.00 for Electric Bill', 0, '2024-01-15'),
 (2, 'You owe $15.00 for Cleaning Supplies', 0, '2024-02-01');
 
--- =====================
--- TAG
--- =====================
+
 INSERT INTO Tag (name) VALUES
 ('urgent'),
 ('shared'),
@@ -144,9 +122,7 @@ INSERT INTO Tag (name) VALUES
 ('monthly'),
 ('one-time');
 
--- =====================
--- EXPENSETAG
--- =====================
+
 INSERT INTO ExpenseTag (expenseID, tagID) VALUES
 (1, 2),
 (1, 4),
